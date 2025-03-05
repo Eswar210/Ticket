@@ -1,0 +1,123 @@
+<div class="container-fluid p-4">
+    <div class="d-flex justify-content-between">
+        <h2>Change Requests</h2>
+        <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#createIncidentModal">Raise Request</button>
+    </div>
+    <table class="table mt-3">
+        <thead>
+            <tr>
+                <th>Sno</th>
+                <th>Title</th>
+                <th>Urgency</th>
+                <th>Status</th>
+                <th>No of Tasks</th>
+                <th>Created At</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="!allrequests">
+                <td colspan="7">No data available</td>
+            </tr>
+            <tr *ngFor="let a of allrequests; index as i">
+                <td>{{ i + 1 }}</td>
+                <td>{{ a.description }}</td>
+                <td>{{ a.urgency }}</td>
+                <td>{{ a.status }}</td>
+                <td>{{ a.tasks.length }}</td>
+                <td>{{ a.createdAt | date:'shortTime' }} on {{ a.createdAt | date:'dd/MM/yyyy' }}</td>
+                <td>
+                    <button class="btn btn-primary" data-bs-target="#assignTaskModal" data-bs-toggle="modal" 
+                        (click)="selected(a)" *ngIf="hasPendingTasks(a)">
+                        <i class="fa fa-tasks"></i>
+                    </button>
+                    <button class="btn btn-info" data-bs-target="#viewTaskModal" data-bs-toggle="modal"
+                        (click)="viewTasks(a)">
+                        <i class="fa fa-eye"></i>
+                    </button>
+                    <button class="btn btn-danger" (click)="deleterequest(a._id)"><i class="fa fa-trash"></i></button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- View Tasks Modal -->
+<div class="modal fade" id="viewTaskModal" tabindex="-1" aria-labelledby="viewTaskModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewTaskModalLabel">Task Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Assigned To</th>
+                            <th>Created By</th>
+                            <th>Due Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let task of selectedRequest?.tasks">
+                            <td>{{ task.title }}</td>
+                            <td>{{ task.description | slice:0:10 }}</td>
+                            <td>{{ task.priority }}</td>
+                            <td>{{ task.status }}</td>
+                            <td>{{ task.assignedTo ? task.assignedTo : 'Unassigned' }}</td>
+                            <td>{{ task.createdBy }}</td>
+                            <td>{{ task.dueDate | date:'dd/MM/yyyy' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Assign Task Modal -->
+<div class="modal fade" id="assignTaskModal" tabindex="-1" aria-labelledby="assignTaskModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="assignTaskModalLabel">Assign Task</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="assignTaskForm">
+            <div class="mb-3">
+              <label for="taskSelect" class="form-label">Select Task</label>
+              <select class="form-select" id="taskSelect" formControlName="selectedTask">
+                <option *ngFor="let task of selectedTask?.tasks" [value]="task._id">
+                  {{ task.title }} - {{ task.priority }}
+                </option>
+              </select>
+            </div>
+  
+            <div class="mb-3">
+              <label for="userSelect" class="form-label">Assign To</label>
+              <select class="form-select" id="userSelect" formControlName="selectedUser">
+                <option *ngFor="let user of users" [value]="user.userName">
+                  {{ user.userName }} ({{ user.role }})
+                </option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" (click)="assignTask()">Assign</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

@@ -1,0 +1,40 @@
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Assigned Tasks</h2>
+  
+    <div class="row">
+      <div class="col-md-4" *ngFor="let task of allrequests; trackBy: trackByTaskId">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">{{ task.title }}</h5>
+            <p class="card-text">{{ task.description }}</p>
+            <p><strong>Priority:</strong> <span class="badge bg-danger">{{ task.priority }}</span></p>
+  
+            <div class="d-flex align-items-center">
+              <span class="me-2"><strong>Status:</strong></span>
+              <div class="dropdown">
+                <button class="btn btn-outline-primary dropdown-toggle" type="button"
+                        (click)="toggleDropdown(task._id)">
+                  <i class="fa fa-edit"></i> {{ task.status }}
+                </button>
+  
+                <div class="dropdown-menu show" *ngIf="task.showDropdown">
+                  <ul class="list-unstyled">
+                    <li *ngFor="let status of statusOptions">
+                      <a class="dropdown-item" (click)="selectStatus(task, status)">
+                        {{ status }} <span *ngIf="task.selectedStatus === status">✅</span>
+                      </a>
+                    </li>
+                  </ul>
+                  <div class="text-center mt-2">
+                    <button class="btn btn-success btn-sm" (click)="updateStatus(task)">Update Status</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

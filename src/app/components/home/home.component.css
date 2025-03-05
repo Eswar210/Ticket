@@ -1,0 +1,5 @@
+body { background-color: #f8f9fa; }
+.card { border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+.card-title { font-weight: bold; }
+.card-button { background-color: #1c1c1c; color: white; border: none; }
+.card-button:hover { background-color: #343a40; }

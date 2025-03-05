@@ -1,0 +1,125 @@
+
+  <ng-template #noIncidents>
+    <p>No incidents found.</p>
+  </ng-template>
+  
+
+  <div class="container-fluid p-4">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center">
+        <h2>Incidents</h2>
+        <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#createIncidentModal">Create Incident</button>
+    </div>
+
+    <!-- Incident Table -->
+    <div class="table-responsive mt-3">
+        <table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Title</th>
+            <th>Priority</th>
+            <th>Category</th>
+            <th>Status</th>
+            <th>Created At</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngIf="incidents.length === 0">
+            <td colspan="6" class="text-center text-muted">No incidents found</td>
+        </tr>
+        
+        <ng-container *ngFor="let incident of incidents">
+            <tr>
+                <td>{{ incident.title }}</td>
+                <td>
+                    <span class="badge" [ngClass]="{
+                        'bg-success': incident.priority === 'Low',
+                        'bg-warning': incident.priority === 'Medium',
+                        'bg-danger': incident.priority === 'High'
+                    }">
+                        {{ incident.priority }}
+                    </span>
+                </td>
+                <td>{{ incident.category }}</td>
+                <td>
+                    <span class="badge bg-info text-dark">{{ incident.status }}</span>
+                </td>
+                <td>{{ incident.createdAt | date:'medium' }}</td>
+                <td>
+                    <button class="btn btn-sm btn-info" (click)="toggleComments(incident)">
+                        {{ expandedIncident === incident ? 'Hide Comments' : 'Show Comments' }}
+                    </button>
+                </td>
+            </tr>
+    
+            <!-- This row will only show if the comments section is expanded -->
+            <tr *ngIf="expandedIncident === incident">
+                <td colspan="6" class="text-end">
+                    <div class="p-3 bg-light ">
+                        <h6>Comments:</h6>
+                        <ul *ngIf="incident.comments; else noComments">
+                            <li>{{ incident.comments }}</li>
+                        </ul>
+                        <ng-template #noComments>
+                            <p class="text-muted">No comments available.</p>
+                        </ng-template>
+                    </div>
+                </td>
+            </tr>
+        </ng-container>
+    </tbody>
+    
+</table>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="createIncidentModal" tabindex="-1" aria-labelledby="createIncidentLabel" aria-hidden="true">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="createIncidentLabel">Create Incident</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form #incidentForm="ngForm">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="title" [(ngModel)]="title" name="title" required>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" rows="3" [(ngModel)]="description" name="description" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="priority" class="form-label">Priority</label>
+                    <select class="form-select" id="priority" [(ngModel)]="priority" name="priority" required>
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="category" class="form-label">Category</label>
+                    <select class="form-select" id="category" [(ngModel)]="category" name="category" required>
+                        <option value="Software">Software</option>
+                        <option value="Hardware">Hardware</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="comments" class="form-label">Comments</label>
+                    <textarea class="form-control" id="comments" rows="2" [(ngModel)]="comments" name="comments"></textarea>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" (click)="createIncident()" form-control.values="">Save Incident</button>
+        </div>
+    </div>
+    
+</div>
+</div>

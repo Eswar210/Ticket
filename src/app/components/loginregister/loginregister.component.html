@@ -1,0 +1,54 @@
+<div class="container-fluid landing-page">
+    <div class="row">
+        <!-- Title and Description Section -->
+        <div class="col-md-7 text-center text-light title-section">
+            <h1 class="title">ConnectX</h1>
+            <h3 class="description"><i>Streamline. Collaborate. Solve. Done.</i></h3>
+            <p class="description">Tired of IT issues slowing you down? Not anymore.<br>Connecting teams with an incident and release management toolkit.</p>
+            
+            <!-- Image Grid Section -->
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="grid-container">
+                        <img src="../../a.webp" class="horizontal a" alt="Horizontal Image 1">
+                        <img src="../../b.webp" class="horizontal b" alt="Horizontal Image 2">
+                        <img src="../../c.webp" class="horizontal c" alt="Horizontal Image 3">
+                        <img src="../../d.webp" class="horizontal d" alt="Horizontal Image 4">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login & Signup Section -->
+        <div class="col-md-5 pt-5">
+            <div class="main mt-5">
+                <input type="checkbox" id="chk">
+                
+                <div class="signup">
+                    <form (ngSubmit)="registerNow()">
+                        <label for="chk">Sign up</label>
+                        <input type="text" name="txt" placeholder="User name" class="form-control" [(ngModel)]="userName" required>
+                        <input type="email" name="email" placeholder="Email" class="form-control" [(ngModel)]="email" required>
+                        <input type="password" name="pswd" placeholder="Password" required [(ngModel)]="password">
+                        
+                        <div class="role-toggle">
+                            <button type="button" [class.active]="role === 'EndUser'" (click)="role='EndUser'">Enduser</button>
+                            <button type="button" [class.active]="role === 'Support'" (click)="role='Support'">Support</button>
+                        </div>
+                        
+                        <button type="submit">Sign up</button>
+                    </form>
+                </div>
+
+                <div class="login">
+                    <form (ngSubmit)="loginNow()">
+                        <label for="chk" aria-hidden="true">Login</label>
+                        <input type="text" name="email" placeholder="userName" [(ngModel)]="userName" required>
+                        <input type="password" name="pswd" placeholder="Password" [(ngModel)]="password" required>
+                        <button type="submit">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,47 @@
+<div class="container mt-4">
+    <div class="row">
+      <div class="col-md-4" *ngFor="let incident of allincidents">
+        <div class="card mb-3">
+          <div class="card-header">
+            <h5 class="card-title">{{ incident.title }}</h5>
+          </div>
+          <div class="card-body">
+            <p class="card-text"><strong>Description:</strong> {{ incident.description }}</p>
+            <p class="card-text"><strong>Status:</strong> {{ incident.status }}</p>
+            <p class="card-text"><strong>Due Date:</strong> {{ incident.updatedAt | date: 'dd/MM/yyyy' }}</p>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editIncidentModal" mat-raised-button (click)="openEditModal(incident)">Edit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal for Editing Incident -->
+<div *ngIf="currentIncident">
+    <div class="modal fade" id="editIncidentModal" tabindex="-1" role="dialog" aria-labelledby="editIncidentModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="editIncidentModalLabel">Edit Incident</h5>
+            </div>
+            <div class="modal-body">
+              <div>
+                <label for="status">Status:</label>
+                <select id="status" [(ngModel)]="currentIncident.status" class="form-control">
+                  <option *ngFor="let status of statusOptions" [value]="status">{{ status }}</option>
+                </select>
+              </div>
+              <div class="mt-3">
+                <label for="comment">Comment:</label>
+                <textarea id="comment" [(ngModel)]="comment" class="form-control" rows="4"></textarea>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="updateIncident()">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+  
